@@ -19,11 +19,11 @@ public class Point3D {
         this._y=y.coord;
         this._z=z.coord;
     }
-
+/**  function that calculates the distance between two points squared*/
     public double distanceSquared (Point3D p){
         return (_x-p._x)*(_x-p._x) +(_y-p._y)*(_y-p._y) +(_z-p._z)*(_z-p._z);
     }
-
+/** A function that calculates the distance between two points */
     public  double distance(Point3D p){
         return Math.sqrt(distanceSquared(p));
     }
