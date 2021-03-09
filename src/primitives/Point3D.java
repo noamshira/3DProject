@@ -1,19 +1,34 @@
 package primitives;
 import static primitives.Util.*;
 
+/**
+ * Class Point3D is basic class for point in 3 Dimension
+ */
 public class Point3D {
     final double _x;
     final double _y;
     final double _z;
 
-    public static Point3D Zero = new Point3D(0,0,0);
+    public static Point3D ZERO = new Point3D(0,0,0);
 
+    /**
+     * Point in 3D
+     * @param x x axis value
+     * @param y y axis value
+     * @param z z axis value
+     */
     public Point3D(double x, double y, double z) {
         this._x = x;
         this._y = y;
         this._z = z;
     }
 
+    /***
+     * Point in 3D
+     * @param x x axis value
+     * @param y y axis value
+     * @param z z axis value
+     */
     public Point3D(Coordinate x, Coordinate y, Coordinate z){
         this._x=x.coord;
         this._y=y.coord;
@@ -45,11 +60,21 @@ public class Point3D {
                 ", _z=" + _z ;
     }
 
+    /**
+     * vector addiction
+     * @param v the vector to add
+     * @return point of the head of the new vector
+     */
     public Point3D add(Vector v) {
         return new Point3D(_x+v.getHead()._x,_y+v.getHead()._y,_z+v.getHead()._z);
     }
 
-    public Point3D subtract(Vector v) {
-        return new Point3D(_x-v.getHead()._x,_y-v.getHead()._y,_z-v.getHead()._z);
+    /**
+     * vector subtract
+     * @param p the head of the vector to subtract
+     * @return result vector
+     */
+    public Vector subtract(Point3D p) {
+        return new Vector(_x-p._x,_y-p._y,_z-p._z);
     }
 }

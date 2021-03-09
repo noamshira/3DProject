@@ -2,11 +2,14 @@ package primitives;
 
 import static primitives.Util.isZero;
 
+/**
+ *
+ */
 public class Vector {
     private Point3D _head;
 
     public Vector(Point3D head) {
-        if (head.equals(Point3D.Zero)) {
+        if (head.equals(Point3D.ZERO)) {
             throw new IllegalArgumentException("vector cant be zero");
         }
         this._head = head;
@@ -36,7 +39,7 @@ public class Vector {
     }
 
     public Vector subtract(Vector v) {
-        return new Vector(_head.subtract(v));
+        return _head.subtract(v._head);
     }
 
     public Vector scale(double a) {
@@ -63,7 +66,7 @@ public class Vector {
     }
 
     public Vector normalize() {
-        double len = lengthSquared();
+        double len = length();
         _head = new Point3D(_head._x / len, _head._y / len, _head._z / len);
         return this;
     }
