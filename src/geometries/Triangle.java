@@ -8,6 +8,11 @@ import primitives.Point3D;
 public class Triangle extends Polygon {
 
 
+    /**
+     * constructor for triangle
+     *
+     * @param vertices
+     */
     public Triangle(Point3D... vertices) {
         super(vertices);
     }

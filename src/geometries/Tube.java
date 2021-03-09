@@ -4,10 +4,19 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
-public class Tube implements Geometry{
+/**
+ * class for tube in 3D space
+ */
+public class Tube implements Geometry {
     private Ray _axisRay;
     private double _radius;
 
+    /**
+     * constuctor for tube
+     *
+     * @param axisRay ray for the axis of the tube
+     * @param radius  the radius of the tube
+     */
     public Tube(Ray axisRay, double radius) {
         _axisRay = axisRay;
         _radius = radius;

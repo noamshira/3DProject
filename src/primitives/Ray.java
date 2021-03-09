@@ -1,13 +1,23 @@
 package primitives;
 
+/**
+ * class for ray in 3D space
+ */
 public class Ray {
     private Point3D _p0;
     private Vector _dir;
 
+    /**
+     * constructor for ray
+     *
+     * @param p0  point on the ray
+     * @param dir direction vector for the ray
+     */
     public Ray(Point3D p0, Vector dir) {
         _p0 = p0;
         _dir = dir.normalized();
     }
+
 
     public Point3D getP0() {
         return _p0;
