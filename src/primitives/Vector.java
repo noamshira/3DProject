@@ -60,7 +60,11 @@ public class Vector {
      * @return the result vector
      */
     public Vector add(Vector v) {
-        return new Vector(_head.add(v));
+        Point3D point3D = _head.add(v);
+        if (point3D.equals(Point3D.ZERO)) {
+            throw new IllegalArgumentException("cant create vector zero");
+        }
+        return new Vector(point3D);
     }
 
     /**
@@ -131,7 +135,11 @@ public class Vector {
      */
     public Vector normalize() {
         double len = length();
-        _head = new Point3D(_head._x.coord / len, _head._y.coord / len, _head._z.coord / len);
+        Point3D head = new Point3D(_head._x.coord / len, _head._y.coord / len, _head._z.coord / len);
+        if (Point3D.ZERO.equals(head)) {
+            throw new ArithmeticException("1 / length of the vector is equal to zero");
+        }
+        _head = head;
         return this;
     }
 
