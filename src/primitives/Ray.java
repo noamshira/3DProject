@@ -4,8 +4,8 @@ package primitives;
  * class for ray in 3D space
  */
 public class Ray {
-    private Point3D _p0;
-    private Vector _dir;
+    final Point3D _p0;
+    final Vector _dir;
 
     /**
      * constructor for ray

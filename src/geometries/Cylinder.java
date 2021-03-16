@@ -6,7 +6,7 @@ import primitives.Ray;
  * class fot cylinder in 3D space
  */
 public class Cylinder extends Tube {
-    private double _height;
+    final double _height;
 
     /**
      * constructor for cylinder

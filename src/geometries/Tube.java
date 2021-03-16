@@ -8,8 +8,8 @@ import primitives.Vector;
  * class for tube in 3D space
  */
 public class Tube implements Geometry {
-    private Ray _axisRay;
-    private double _radius;
+    final Ray _axisRay;
+    final double _radius;
 
     /**
      * constuctor for tube
@@ -35,8 +35,14 @@ public class Tube implements Geometry {
         Vector pP0 = p.subtract(_axisRay.getP0());
         double t = _axisRay.getDir().dotProduct(pP0);
         Vector vT = _axisRay.getDir().scale(t);
-        Vector o = new Vector(_axisRay.getP0().add(vT));
-        return o;
+        Vector o;
+        try {
+            o = new Vector(_axisRay.getP0().add(vT));
+        } catch (IllegalArgumentException e) {
+            //if the point o is (0,0,0) it can't be vector but this point exist so calculate it
+            return p.subtract(Point3D.ZERO).normalize();
+        }
+        return p.subtract(o.getHead()).normalize();
     }
 
     @Override

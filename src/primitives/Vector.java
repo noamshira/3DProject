@@ -6,7 +6,7 @@ import static primitives.Util.isZero;
  * class for vector in 3d space
  */
 public class Vector {
-    private Point3D _head;
+    Point3D _head;
 
     /**
      * constructor of vector in 3d space

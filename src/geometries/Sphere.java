@@ -7,8 +7,8 @@ import primitives.Vector;
  * class for sphere in 3D space
  */
 public class Sphere implements Geometry {
-    private Point3D _center;
-    private double _radius;
+    final Point3D _center;
+    final double _radius;
 
     /**
      * constructor for sphere

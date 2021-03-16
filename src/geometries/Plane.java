@@ -7,8 +7,8 @@ import primitives.Vector;
  * class for plane in 3D space
  */
 public class Plane implements Geometry {
-    private Point3D _p0;
-    private Vector _normal;
+    final Point3D _p0;
+    final Vector _normal;
 
     /**
      * constructor of plane
