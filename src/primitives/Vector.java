@@ -94,6 +94,8 @@ public class Vector {
      * @return scalar - the result of the dot product
      */
     public double dotProduct(Vector v) {
+        //calculate by the formula:
+        //x1*x2+y1*y2+z1*z2
         return _head._x.coord * v._head._x.coord + _head._y.coord * v._head._y.coord + _head._z.coord * v._head._z.coord;
     }
 
@@ -104,6 +106,11 @@ public class Vector {
      * @return the result vector
      */
     public Vector crossProduct(Vector v) {
+        //calculate bt the formula:
+        //u X v is:
+        //x = u2*v3 - u3*v2
+        //y = u3*v1 - u1*v3
+        //z = u1*v2 - u2*v1
         double x = _head._y.coord * v._head._z.coord - _head._z.coord * v._head._y.coord;
         double y = _head._z.coord * v._head._x.coord - _head._x.coord * v._head._z.coord;
         double z = _head._x.coord * v._head._y.coord - _head._y.coord * v._head._x.coord;
@@ -116,6 +123,8 @@ public class Vector {
      * @return the squared length
      */
     public double lengthSquared() {
+        //calculate by the formula:
+        //x^2 +y^2 + z^2
         return _head._x.coord * _head._x.coord + _head._y.coord * _head._y.coord + _head._z.coord * _head._z.coord;
     }
 
@@ -125,6 +134,8 @@ public class Vector {
      * @return the length of the vector
      */
     public double length() {
+        //calculate by the formula:
+        //sqr(x^2 +y^2 + z^2)
         return Math.sqrt(lengthSquared());
     }
 

@@ -32,6 +32,13 @@ public class Tube implements Geometry {
 
     @Override
     public Vector getNormal(Point3D p) {
+        //normal to tube calculate by the formula P - O
+        //P is point on the tube
+        //O is projection of P on cylinder's ray
+        //O is calculate by:
+        //t = v * (P - P0)
+        //O = P0 + t * v
+        //where v is the ray direction and P0 is point on the ray
         Vector pP0 = p.subtract(_axisRay.getP0());
         double t = _axisRay.getDir().dotProduct(pP0);
         Vector vT = _axisRay.getDir().scale(t);

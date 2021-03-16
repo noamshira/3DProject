@@ -11,7 +11,7 @@ public class Triangle extends Polygon {
     /**
      * constructor for triangle
      *
-     * @param vertices
+     * @param vertices list of vertices according to their order by edge path
      */
     public Triangle(Point3D... vertices) {
         super(vertices);

@@ -13,7 +13,7 @@ public class Point3D {
     public static Point3D ZERO = new Point3D(0, 0, 0);
 
     /**
-     * Point in 3D
+     * constructor for Point in 3D
      *
      * @param x x axis value
      * @param y y axis value
@@ -26,7 +26,7 @@ public class Point3D {
     }
 
     /***
-     * Point in 3D
+     * constructor for Point in 3D
      * @param x x axis value
      * @param y y axis value
      * @param z z axis value
@@ -38,15 +38,21 @@ public class Point3D {
     }
 
     /**
-     * function that calculates the distance between two points squared
+     * calculate squared distance in 3D space
+     *
+     * @param p point in 3d space
+     * @return the squared distance
      */
     public double distanceSquared(Point3D p) {
-        return (_x.coord - p._x.coord) * (_x.coord - p._x.coord) + (_y.coord - p._y.coord) * (_y.coord - p._y.coord)
+        return (_x.coord - p._x.coord) * (_x.coord - p._x.coord)
+                + (_y.coord - p._y.coord) * (_y.coord - p._y.coord)
                 + (_z.coord - p._z.coord) * (_z.coord - p._z.coord);
     }
 
     /**
-     * A function that calculates the distance between two points
+     *  calculate distance in 3D space
+     * @param p point in 3D space
+     * @return the distance
      */
     public double distance(Point3D p) {
         return Math.sqrt(distanceSquared(p));
@@ -76,7 +82,8 @@ public class Point3D {
      * @return point of the head of the new vector
      */
     public Point3D add(Vector v) {
-        return new Point3D(_x.coord + v.getHead()._x.coord,
+        return new Point3D(
+                _x.coord + v.getHead()._x.coord,
                 _y.coord + v.getHead()._y.coord,
                 _z.coord + v.getHead()._z.coord);
     }
@@ -88,6 +95,9 @@ public class Point3D {
      * @return result vector
      */
     public Vector subtract(Point3D p) {
-        return new Vector(_x.coord - p._x.coord, _y.coord - p._y.coord, _z.coord - p._z.coord);
+        return new Vector(
+                _x.coord - p._x.coord,
+                _y.coord - p._y.coord,
+                _z.coord - p._z.coord);
     }
 }
