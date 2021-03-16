@@ -30,7 +30,11 @@ public class Plane implements Geometry {
      */
     public Plane(Point3D p1, Point3D p2, Point3D p3) {
         _p0 = p1;
-        _normal = null;
+        Vector v1 = p2.subtract(p1);
+        Vector v2 = p3.subtract(p1);
+        Vector normal = v1.crossProduct(v2);
+        normal.normalize();
+        _normal = normal;
     }
 
     public Point3D getP0() {

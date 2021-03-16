@@ -87,7 +87,7 @@ public class Vector {
      * dot product of 2 vectors
      *
      * @param v vector
-     * @return the result vector
+     * @return scalar - the result of the dot product
      */
     public double dotProduct(Vector v) {
         return _head._x.coord * v._head._x.coord + _head._y.coord * v._head._y.coord + _head._z.coord * v._head._z.coord;
