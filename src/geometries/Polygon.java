@@ -7,7 +7,7 @@ import static primitives.Util.*;
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
- * 
+ *
  * @author Dan
  */
 public class Polygon implements Geometry {
@@ -23,7 +23,7 @@ public class Polygon implements Geometry {
 	/**
 	 * Polygon constructor based on vertices list. The list must be ordered by edge
 	 * path. The polygon must be convex.
-	 * 
+	 *
 	 * @param vertices list of vertices according to their order by edge path
 	 * @throws IllegalArgumentException in any case of illegal combination of
 	 *                                  vertices:
@@ -33,9 +33,9 @@ public class Polygon implements Geometry {
 	 *                                  point
 	 *                                  <li>The vertices are not in the same
 	 *                                  plane</li>
-	 *                                <li>Three consequent vertices lay in the
-	 *                                    <li>The order of vertices is not according
+	 *                                  <li>The order of vertices is not according
 	 *                                  to edge path</li>
+	 *                                  <li>Three consequent vertices lay in the
 	 *                                  same line (180&#176; angle between two
 	 *                                  consequent edges)
 	 *                                  <li>The polygon is concave (not convex)</li>
