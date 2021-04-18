@@ -100,4 +100,16 @@ public class Point3D {
                 _y.coord - p._y.coord,
                 _z.coord - p._z.coord);
     }
+
+    public Coordinate getX() {
+        return _x;
+    }
+
+    public Coordinate getY() {
+        return _y;
+    }
+
+    public Coordinate getZ() {
+        return _z;
+    }
 }
