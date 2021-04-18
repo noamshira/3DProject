@@ -21,4 +21,8 @@ class PlaneTests {
         Plane p = new Plane(new Point3D(1, 2, 3), new Vector(5, 0, 4));
         assertEquals(new Vector(5.0, 0.0, 4.0), p.getNormal(null), "wrong normal");
     }
+
+    @Test
+    void findIntsersections() {
+    }
 }

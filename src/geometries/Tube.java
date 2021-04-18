@@ -4,6 +4,8 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * class for tube in 3D space
  */
@@ -56,5 +58,10 @@ public class Tube implements Geometry {
     public String toString() {
         return "_axisRay=" + _axisRay +
                 ", _radius=" + _radius;
+    }
+
+    @Override
+    public List<Point3D> findIntersections(Ray ray) {
+        return null;
     }
 }
