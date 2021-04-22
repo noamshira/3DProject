@@ -80,7 +80,7 @@ public class Plane implements Geometry {
         double t = alignZero(nQMinusP0 / nv);
         if (t <= 0) return null;
         //𝑃 = 𝑃0 + 𝑡 ∙ 𝑣
-        Point3D p = p0.add(v.scale(t));
+        Point3D p = ray.getPoint(t);
         List<Point3D> l = new ArrayList<Point3D>();
         l.add(p);
         return l;

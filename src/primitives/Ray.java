@@ -18,6 +18,15 @@ public class Ray {
         _dir = dir.normalized();
     }
 
+    /**
+     * get point on the ray by the scalar t
+     *
+     * @param t scalar for the direction vector
+     * @return Point3D on the ray
+     */
+    public Point3D getPoint(double t) {
+        return _p0.add(_dir.scale(t));
+    }
 
     public Point3D getP0() {
         return _p0;

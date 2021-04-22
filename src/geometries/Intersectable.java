@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface Intersectable {
     /**
-     * find the pion of the intersection between ray and the geometry
+     * find the points of the intersection between ray and the geometry
      *
-     * @param ray
+     * @param ray the ray to check
      * @return list of point of the intersection
      */
     List<Point3D> findIntersections(Ray ray);

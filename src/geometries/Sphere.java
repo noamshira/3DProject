@@ -74,7 +74,7 @@ public class Sphere implements Geometry {
         // but by the formula in this case the result is p0 + v*r
         catch (IllegalArgumentException e) {
             List<Point3D> l = new ArrayList<Point3D>();
-            l.add(ray.getP0().add(ray.getDir().scale(_radius)));
+            l.add(ray.getPoint(_radius));
             return l;
         }
         double tm = ray.getDir().dotProduct(u);
@@ -89,13 +89,13 @@ public class Sphere implements Geometry {
         List<Point3D> l = null;
         if (t1 > 0) {
             l = new ArrayList<Point3D>();
-            l.add(ray.getP0().add(ray.getDir().scale(t1)));
+            l.add(ray.getPoint(t1));
         }
         if (t2 > 0) {
             if (l == null) {
                 l = new ArrayList<Point3D>();
             }
-            l.add(ray.getP0().add(ray.getDir().scale(t2)));
+            l.add(ray.getPoint(t2));
         }
         return l;
     }
