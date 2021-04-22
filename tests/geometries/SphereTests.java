@@ -22,13 +22,11 @@ class SphereTests {
         assertEquals(new Vector(0.0, 1.0, 0.0), s.getNormal(new Point3D(0, 1, 1)), "wrong normal");
     }
 
+    /**
+     * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
+     */
     @Test
     void findIntsersections() {
-
-        /**
-         * Test method for {@link geometries.Sphere#findIntersections(primitives.Ray)}.
-         */
-
         Sphere sphere = new Sphere(new Point3D(1, 0, 0), 1d);
 
         // ============ Equivalence Partitions Tests ==============
