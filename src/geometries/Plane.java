@@ -4,13 +4,16 @@ import primitives.Point3D;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static primitives.Util.*;
 
 /**
  * class for plane in 3D space
  */
 public class Plane implements Geometry {
-    final Point3D _p0;
+    final Point3D _q0;
     final Vector _normal;
 
     /**
@@ -20,7 +23,7 @@ public class Plane implements Geometry {
      * @param normal normal vector to the plane
      */
     public Plane(Point3D p0, Vector normal) {
-        _p0 = p0;
+        _q0 = p0;
         _normal = normal;
     }
 
@@ -32,7 +35,7 @@ public class Plane implements Geometry {
      * @param p3 point on the plane
      */
     public Plane(Point3D p1, Point3D p2, Point3D p3) {
-        _p0 = p1;
+        _q0 = p1;
 
         //calculate normal to the plane with 3 points
         //v1 = p2-p1
@@ -46,14 +49,8 @@ public class Plane implements Geometry {
         _normal = normal;
     }
 
-    public Point3D getP0() {
-        return _p0;
-    }
-
-
-    @Override
-    public String toString() {
-        return "_p0=" + _p0.toString() + ", _normal=" + _normal.toString();
+    public Point3D getQ0() {
+        return _q0;
     }
 
     @Override
@@ -63,6 +60,34 @@ public class Plane implements Geometry {
 
     @Override
     public List<Point3D> findIntersections(Ray ray) {
-        return null;
+        /*
+        Ray points: 𝑃 = 𝑃0 + 𝑡 ∙ 𝑣, 𝑡 > 0
+                𝑡 = (𝑁 ∙ (𝑄0 − 𝑃0)) / (𝑁 ∙ 𝑣)
+        */
+        Point3D p0 = ray.getP0();
+        Vector v = ray.getDir();
+
+        //if q0 == p0 t is 0
+        if (p0.equals(_q0)) return null;
+        //𝑁 ∙ (𝑄0 − 𝑃0)
+        double nQMinusP0 = _normal.dotProduct(_q0.subtract(p0));
+        //if 𝑁 ∙ (𝑄0 − 𝑃0) is 0 -> t is 0
+        if (isZero(nQMinusP0)) return null;
+        //𝑁 ∙ 𝑣
+        double nv = _normal.dotProduct(v);
+        //if 𝑁 ∙ 𝑣 is 0 t is undefine and there is no intersection
+        if (isZero(nv)) return null;
+        double t = alignZero(nQMinusP0 / nv);
+        if (t <= 0) return null;
+        //𝑃 = 𝑃0 + 𝑡 ∙ 𝑣
+        Point3D p = p0.add(v.scale(t));
+        List<Point3D> l = new ArrayList<Point3D>();
+        l.add(p);
+        return l;
+    }
+
+    @Override
+    public String toString() {
+        return "_p0=" + _q0.toString() + ", _normal=" + _normal.toString();
     }
 }

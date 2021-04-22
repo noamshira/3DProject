@@ -2,10 +2,14 @@ package geometries;
 
 import primitives.Point3D;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static primitives.Util.*;
 
 /**
  * class for sphere in 3D space
@@ -67,9 +71,9 @@ public class Sphere implements Geometry {
             u = _center.subtract(ray.getP0());
         }
         // if the ray start on the center the result is zero, and we cant make vector from zero,
-        // but by the formula in this case the result is po + v*r
+        // but by the formula in this case the result is p0 + v*r
         catch (IllegalArgumentException e) {
-            List<Point3D> l = new LinkedList<Point3D>();
+            List<Point3D> l = new ArrayList<Point3D>();
             l.add(ray.getP0().add(ray.getDir().scale(_radius)));
             return l;
         }
@@ -80,16 +84,16 @@ public class Sphere implements Geometry {
             return null;
         }
         double th = Math.sqrt((_radius * _radius) - (d * d));
-        double t1 = tm + th;
-        double t2 = tm - th;
+        double t1 = Util.alignZero(tm + th);
+        double t2 = Util.alignZero(tm - th);
         List<Point3D> l = null;
         if (t1 > 0) {
-            l = new LinkedList<Point3D>();
+            l = new ArrayList<Point3D>();
             l.add(ray.getP0().add(ray.getDir().scale(t1)));
         }
         if (t2 > 0) {
             if (l == null) {
-                l = new LinkedList<Point3D>();
+                l = new ArrayList<Point3D>();
             }
             l.add(ray.getP0().add(ray.getDir().scale(t2)));
         }
