@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 /**
  * class for ray in 3D space
  */
@@ -16,6 +18,10 @@ public class Ray {
     public Ray(Point3D p0, Vector dir) {
         _p0 = p0;
         _dir = dir.normalized();
+    }
+
+    public Point3D findClosestPoint(List<Point3D> lst) {
+        return null;
     }
 
     /**
