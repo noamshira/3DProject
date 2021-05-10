@@ -5,11 +5,16 @@ import primitives.Color;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test for image writer
+ */
 class ImageWriterTest {
 
     @Test
     void testImageWriter() {
-
+/**
+ * make simple image of colored background and grid
+ */
         ImageWriter writer = new ImageWriter("basic test", 800, 500);
 
         Color c;
