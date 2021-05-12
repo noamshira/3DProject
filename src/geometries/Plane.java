@@ -12,7 +12,7 @@ import static primitives.Util.*;
 /**
  * class for plane in 3D space
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
     final Point3D _q0;
     final Vector _normal;
 
@@ -84,6 +84,13 @@ public class Plane implements Geometry {
         List<Point3D> l = new ArrayList<Point3D>();
         l.add(p);
         return l;
+    }
+
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        List<Point3D> l = findIntersections(ray);
+        if (l == null) return null;
+        return List.of(new GeoPoint(this, l.get(0)));
     }
 
     @Override

@@ -4,6 +4,7 @@ import primitives.Point3D;
 import primitives.Ray;
 
 import java.util.List;
+import java.util.Objects;
 
 /***
  * interface for intersection of ray with geometries
@@ -16,4 +17,27 @@ public interface Intersectable {
      * @return list of point of the intersection
      */
     List<Point3D> findIntersections(Ray ray);
+
+    List<GeoPoint> findGeoIntersections(Ray ray);
+
+    public static class GeoPoint {
+        public Geometry geometry;
+        public Point3D point;
+
+        public GeoPoint(Geometry geometry, Point3D point) {
+            this.geometry = geometry;
+            this.point = point;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            GeoPoint geoPoint = (GeoPoint) o;
+            return geometry.getClass() == geoPoint.geometry.getClass() && point.equals(geoPoint.point);
+        }
+
+
+    }
+
 }

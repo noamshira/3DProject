@@ -14,7 +14,7 @@ import static primitives.Util.*;
 /**
  * class for sphere in 3D space
  */
-public class Sphere implements Geometry {
+public class Sphere extends Geometry {
     final Point3D _center;
     final double _radius;
 
@@ -97,7 +97,19 @@ public class Sphere implements Geometry {
             }
             l.add(ray.getPoint(t2));
         }
+
+
         return l;
     }
 
+    @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        List<Point3D> l = findIntersections(ray);
+        if (l == null) return null;
+        List<GeoPoint> lst = new ArrayList<GeoPoint>();
+        for (Point3D p : l) {
+            lst.add(new GeoPoint(this, p));
+        }
+        return lst;
+    }
 }

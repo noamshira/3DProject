@@ -71,6 +71,13 @@ public class Triangle extends Polygon {
     }
 
     @Override
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+        List<Point3D> l = findIntersections(ray);
+        if (l == null) return null;
+        return List.of(new GeoPoint(this, l.get(0)));
+    }
+
+    @Override
     public String toString() {
         return super.toString();
     }
