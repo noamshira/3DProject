@@ -64,8 +64,11 @@ public class Geometries implements Intersectable {
     public List<GeoPoint> findGeoIntersections(Ray ray) {
         List<GeoPoint> intersections = null;
         for (Intersectable g : lst) {
-            var geoIntersections = g.findGeoIntersections(ray);
-            if (geoIntersections != null) intersections.addAll(geoIntersections);
+            List<Intersectable.GeoPoint> geoIntersections = g.findGeoIntersections(ray);
+            if (geoIntersections != null) {
+                intersections = new ArrayList<GeoPoint>();
+                intersections.addAll(geoIntersections);
+            }
         }
         return intersections;
     }

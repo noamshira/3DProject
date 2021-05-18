@@ -9,14 +9,14 @@ import primitives.Vector;
  */
 public abstract class Geometry implements Intersectable {
 
-    protected Color emmission = Color.BLACK;
+    protected Color emission = Color.BLACK;
 
-    public Color getEmmission() {
-        return emmission;
+    public Color getEmission() {
+        return emission;
     }
 
-    public Geometry setEmmission(Color emmission) {
-        this.emmission = emmission;
+    public Geometry setEmission(Color emission) {
+        this.emission = emission;
         return this;
     }
 
