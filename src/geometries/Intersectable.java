@@ -5,6 +5,7 @@ import primitives.Ray;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /***
  * interface for intersection of ray with geometries
@@ -16,7 +17,12 @@ public interface Intersectable {
      * @param ray the ray to check
      * @return list of point of the intersection
      */
-    List<Point3D> findIntersections(Ray ray);
+    default List<Point3D> findIntersections(Ray ray) {
+        List<Intersectable.GeoPoint> geoList = findGeoIntersections(ray);
+        return geoList == null ? null
+                : geoList.stream().map(gp -> gp.point).collect(Collectors.toList());
+    }
+
 
     List<GeoPoint> findGeoIntersections(Ray ray);
 

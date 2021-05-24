@@ -44,21 +44,7 @@ public class Geometries implements Intersectable {
         lst.addAll(new ArrayList<Intersectable>(List.of(geometries)));
     }
 
-    @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        //find the intersection of every geometry in lst and return the list of the points
-        List<Point3D> pLst = null;
-        List<Point3D> result;
-        for (int i = 0; i < lst.size(); i++) {
-            result = lst.get(i).findIntersections(ray);
-            if (result != null) {
-                //If these are the first points found
-                if (pLst == null) pLst = result;
-                else pLst.addAll(result);
-            }
-        }
-        return pLst;
-    }
+
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray) {
@@ -66,8 +52,11 @@ public class Geometries implements Intersectable {
         for (Intersectable g : lst) {
             List<Intersectable.GeoPoint> geoIntersections = g.findGeoIntersections(ray);
             if (geoIntersections != null) {
-                intersections = new ArrayList<GeoPoint>();
-                intersections.addAll(geoIntersections);
+                if (intersections != null) {
+                    intersections.addAll(geoIntersections);
+                } else {
+                    intersections = geoIntersections;
+                }
             }
         }
         return intersections;

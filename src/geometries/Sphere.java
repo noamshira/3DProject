@@ -55,9 +55,10 @@ public class Sphere extends Geometry {
                 ", _radius=" + _radius;
     }
 
+
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        /*
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+         /*
         Ray points: 𝑃 = 𝑃0 + 𝑡 ∙ 𝑣, 𝑡 > 0
         Sphere points: |𝑃 − 𝑂|^2 − 𝑟^2 = 0
         𝑢 = 𝑂 − 𝑃0
@@ -73,8 +74,8 @@ public class Sphere extends Geometry {
         // if the ray start on the center the result is zero, and we cant make vector from zero,
         // but by the formula in this case the result is p0 + v*r
         catch (IllegalArgumentException e) {
-            List<Point3D> l = new ArrayList<Point3D>();
-            l.add(ray.getPoint(_radius));
+            List<GeoPoint> l = new ArrayList<GeoPoint>();
+            l.add(new GeoPoint(this, ray.getPoint(_radius)));
             return l;
         }
         double tm = ray.getDir().dotProduct(u);
@@ -86,30 +87,17 @@ public class Sphere extends Geometry {
         double th = Math.sqrt((_radius * _radius) - (d * d));
         double t1 = Util.alignZero(tm + th);
         double t2 = Util.alignZero(tm - th);
-        List<Point3D> l = null;
+        List<GeoPoint> l = null;
         if (t1 > 0) {
-            l = new ArrayList<Point3D>();
-            l.add(ray.getPoint(t1));
+            l = new ArrayList<GeoPoint>();
+            l.add(new GeoPoint(this, ray.getPoint(t1)));
         }
         if (t2 > 0) {
             if (l == null) {
-                l = new ArrayList<Point3D>();
+                l = new ArrayList<GeoPoint>();
             }
-            l.add(ray.getPoint(t2));
+            l.add(new GeoPoint(this, ray.getPoint(t2)));
         }
-
-
         return l;
-    }
-
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        List<Point3D> l = findIntersections(ray);
-        if (l == null) return null;
-        List<GeoPoint> lst = new ArrayList<GeoPoint>();
-        for (Point3D p : l) {
-            lst.add(new GeoPoint(this, p));
-        }
-        return lst;
     }
 }

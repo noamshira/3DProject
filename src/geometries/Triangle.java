@@ -22,9 +22,10 @@ public class Triangle extends Polygon {
         super(vertices);
     }
 
+
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
-        /*
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
+      /*
          there is intersection only if the ray intersects with the plane of the triangle
          if the point is on the plane check if the intersection point with its plane is inside the triangle
          𝑣1 = 𝑃1 − 𝑃0
@@ -43,8 +44,9 @@ public class Triangle extends Polygon {
         Vector v = ray.getDir();
         //only if the ray intersects with the plane of the triangle
         Plane p = new Plane(p1, p2, p3);
-        List<Point3D> l = p.findIntersections(ray);
+        List<GeoPoint> l = p.findGeoIntersections(ray);
         if (l == null) return null;
+        l.set(0, new GeoPoint(this, l.get(0).point));
         // 𝑣1 = 𝑃1 − 𝑃0
         // 𝑣2 = 𝑃2 − 𝑃0
         // 𝑣3 = 𝑃3 − 𝑃0
@@ -68,13 +70,6 @@ public class Triangle extends Polygon {
         //The point is inside if all 𝒗 ∙ 𝑵𝒊 have the same sign (+/-)
         if (Util.checkSign(n1v, n2v) && Util.checkSign(n1v, n3v)) return l;
         else return null;
-    }
-
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        List<Point3D> l = findIntersections(ray);
-        if (l == null) return null;
-        return List.of(new GeoPoint(this, l.get(0)));
     }
 
     @Override

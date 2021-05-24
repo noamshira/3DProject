@@ -5,8 +5,8 @@ import primitives.Color;
 /**
  * Class for the ambient light of the scene
  */
-public class AmbientLight {
-    Color intensity;
+public class AmbientLight extends Light {
+
 
     // ***************** Constructor ********************** //
 
@@ -18,12 +18,10 @@ public class AmbientLight {
      */
     public AmbientLight(Color ia, double ka) {
         //intensity = ia * ka
-        intensity = ia.scale(ka);
+        super(ia.scale(ka));
     }
 
-    // ***************** Getter ********************** //
-
-    public Color getIntensity() {
-        return intensity;
+    public AmbientLight() {
+        super(Color.BLACK);
     }
 }

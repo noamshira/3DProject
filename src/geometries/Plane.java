@@ -59,7 +59,7 @@ public class Plane extends Geometry {
     }
 
     @Override
-    public List<Point3D> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersections(Ray ray) {
         /*
         Ray points: 𝑃 = 𝑃0 + 𝑡 ∙ 𝑣, 𝑡 > 0
                 𝑡 = (𝑁 ∙ (𝑄0 − 𝑃0)) / (𝑁 ∙ 𝑣)
@@ -81,16 +81,9 @@ public class Plane extends Geometry {
         if (t <= 0) return null;
         //𝑃 = 𝑃0 + 𝑡 ∙ 𝑣
         Point3D p = ray.getPoint(t);
-        List<Point3D> l = new ArrayList<Point3D>();
-        l.add(p);
+        List<GeoPoint> l = new ArrayList<GeoPoint>();
+        l.add(new GeoPoint(this, p));
         return l;
-    }
-
-    @Override
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        List<Point3D> l = findIntersections(ray);
-        if (l == null) return null;
-        return List.of(new GeoPoint(this, l.get(0)));
     }
 
     @Override
