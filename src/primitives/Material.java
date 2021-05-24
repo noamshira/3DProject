@@ -1,9 +1,21 @@
 package primitives;
 
 public class Material {
-    public double kD = 0;
-    public double kS = 0;
-    public int nShininess = 0;
+    private double kD = 0;
+    private double kS = 0;
+    private int nShininess = 0;
+
+    public double getkD() {
+        return kD;
+    }
+
+    public double getkS() {
+        return kS;
+    }
+
+    public int getnShininess() {
+        return nShininess;
+    }
 
     public Material setkD(double kD) {
         this.kD = kD;
