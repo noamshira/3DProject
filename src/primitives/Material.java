@@ -1,33 +1,39 @@
 package primitives;
 
+/**
+ * class for material details
+ */
 public class Material {
     private double kD = 0;
     private double kS = 0;
     private int nShininess = 0;
 
-    public double getkD() {
+    // ***************** Getters ********************** //
+    public double getKd() {
         return kD;
     }
 
-    public double getkS() {
+    public double getKs() {
         return kS;
     }
 
-    public int getnShininess() {
+    public int getShininess() {
         return nShininess;
     }
 
-    public Material setkD(double kD) {
+    // ***************** Setters ********************** //
+
+    public Material setKd(double kD) {
         this.kD = kD;
         return this;
     }
 
-    public Material setkS(double kS) {
+    public Material setKs(double kS) {
         this.kS = kS;
         return this;
     }
 
-    public Material setnShininess(int nShininess) {
+    public Material setShininess(int nShininess) {
         this.nShininess = nShininess;
         return this;
     }
