@@ -13,7 +13,7 @@ import static primitives.Util.alignZero;
  * Class for basic ray tracer that find the color from the rays
  */
 public class RayTracerBasic extends RayTracerBase {
-    private static final double DELTA = 0.1;
+    private static final double DELTA = 0.1; //const for the shift of the shadow rays
     public RayTracerBasic(Scene scene) {
         super(scene);
     }
@@ -108,7 +108,7 @@ public class RayTracerBasic extends RayTracerBase {
     }
 
     /**
-     * Calculate the difusive light with the geometry
+     * Calculate the diffusive light with the geometry
      * Process:
      * 2. multiple the dot product of the light vector and the normal by the kd of the geometry material
      * 3. multiple the values of the light by line 2
@@ -124,6 +124,15 @@ public class RayTracerBasic extends RayTracerBase {
         return color;
     }
 
+    /**
+     * calculate if the light get to the geometry
+     *
+     * @param l           vector of the light ray
+     * @param n           vector of the normal to the geometry
+     * @param gp          geoPoint of the intersection
+     * @param lightSource the light source in the scene
+     * @return true if there is light at this point
+     */
     private boolean unshaded(Vector l, Vector n, GeoPoint gp, LightSource lightSource) {
         Vector lightDirection = l.scale(-1); // from point to light source
         Vector delta = n.scale(n.dotProduct(lightDirection) > 0 ? DELTA : -DELTA);
@@ -131,6 +140,7 @@ public class RayTracerBasic extends RayTracerBase {
         Ray lightRay = new Ray(point, lightDirection);
         List<GeoPoint> intersections = _scene.geometries.findGeoIntersections(lightRay);
         if (intersections == null) return true;
+        //check if the light source is before or after the intersection
         double lightDistance = lightSource.getDistance(gp.point);
         for (GeoPoint geoPoint : intersections) {
             if (alignZero(geoPoint.point.distance(gp.point) - lightDistance) <= 0)
