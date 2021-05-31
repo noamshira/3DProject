@@ -11,6 +11,7 @@ import java.util.List;
 public class Ray {
     final Point3D _p0;
     final Vector _dir;
+    private static final double DELTA = 0.1; //const for the shift of the shadow rays
 
     /**
      * constructor for ray
@@ -21,6 +22,12 @@ public class Ray {
     public Ray(Point3D p0, Vector dir) {
         _p0 = p0;
         _dir = dir.normalized();
+    }
+
+    public Ray(Point3D head, Vector direction, Vector normal) {
+        Vector delta = normal.scale(normal.dotProduct(direction) > 0 ? DELTA : -DELTA);
+        _p0 = head.add(delta);
+        _dir = direction.normalized();
     }
 
     public Point3D findClosestPoint(List<Point3D> lst) {
