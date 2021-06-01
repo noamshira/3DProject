@@ -33,7 +33,7 @@ public class RayTracerBasic extends RayTracerBase {
 
 
     /**
-     * calculate the color of the given point
+     * recursive calculate the color of the given point
      *
      * @param geopoint geoPoint to calculate her color
      * @param ray      the ray from he camera to the geometry
@@ -44,6 +44,17 @@ public class RayTracerBasic extends RayTracerBase {
                 .add(_scene.ambientLight.getIntensity());
     }
 
+    /**
+     * recursive function. calculate the color of the ray. add the emission ,and use the function calc local effect
+     * to calculate the diffusive and the specular, and if the recursive counter > 1
+     * calculate the shadows,the reflection and the refraction
+     *
+     * @param intersection the intersection point of the ray and the geometry
+     * @param ray          the ray to the geometry
+     * @param level        the level of the recursive
+     * @param k
+     * @return return the calculated color of the ray
+     */
     private Color calcColor(GeoPoint intersection, Ray ray, int level, double k) {
         Color color = intersection.geometry.getEmission();
         color = color.add(calcLocalEffects(intersection, ray, k));
@@ -51,11 +62,12 @@ public class RayTracerBasic extends RayTracerBase {
     }
 
     /**
-     * calculate the effect of the local light source and reflections
+     * calculate the effect of the diffusive and the specular in the given ray intersection
      *
-     * @param intersection the point of the intersection of the ray and the geometry
-     * @param ray          the ray that intersect with the geometry
-     * @return the color of the local effects
+     * @param intersection the intersection of the ray and the geometry
+     * @param ray          the from the camera to the geometry
+     * @param k
+     * @return return the color of the ray after calculating the local effect
      */
     private Color calcLocalEffects(GeoPoint intersection, Ray ray, double k) {
         //check if the ray is visible
@@ -76,7 +88,6 @@ public class RayTracerBasic extends RayTracerBase {
                 double ktr = transparency(lightSource, l, n, intersection);
                 if (ktr * k > MIN_CALC_COLOR_K) {
                     Color lightIntensity = lightSource.getIntensity(intersection.point).scale(ktr);
-                    ;
                     color = color.add(calcDiffusive(kd, nl, lightIntensity),
                             calcSpecular(ks, l, n, v, nl, nShininess, lightIntensity));
                 }
@@ -132,9 +143,18 @@ public class RayTracerBasic extends RayTracerBase {
     }
 
 
+    /**
+     * calculate the transparency of the geometry by the given light, 1 is max transparency and 0 is no transparency
+     *
+     * @param light    the light source
+     * @param l        the direction of the light
+     * @param n        the normal to the geometry
+     * @param geopoint the point of the intersection
+     * @return dounle of the value of the transparency
+     */
     private double transparency(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
         Vector lightDirection = l.scale(-1); // from point to light source
-        Ray lightRay = new Ray(geopoint.point, lightDirection, n);
+        Ray lightRay = new Ray(geopoint.point, lightDirection, n);//add delta
         double lightDistance = light.getDistance(geopoint.point);
         List<GeoPoint> intersections = _scene.geometries.findGeoIntersections(lightRay);
         if (intersections == null) return 1.0;
@@ -149,6 +169,17 @@ public class RayTracerBasic extends RayTracerBase {
     }
 
 
+    /**
+     * recursive function.
+     * calculate the global effect of the rest of the scene.
+     * calculate the reflection , the shadows and the refraction
+     *
+     * @param gp    the point of the intersection of the ray and the geometry
+     * @param v     the the direction of the ray
+     * @param level the level of the recursive
+     * @param k
+     * @return return the color of the global effect
+     */
     private Color calcGlobalEffects(GeoPoint gp, Vector v, int level, double k) {
         Color color = Color.BLACK;
         Vector n = gp.geometry.getNormal(gp.point);
@@ -163,23 +194,54 @@ public class RayTracerBasic extends RayTracerBase {
         return color;
     }
 
+    /**
+     * calculate the color of the constructed ray from refraction or reflection
+     *
+     * @param ray   the ray of from the refraction or the refraction
+     * @param level the level of the recursive
+     * @param kx
+     * @param kkx
+     * @return return the color of the global effect
+     */
     private Color calcGlobalEffect(Ray ray, int level, double kx, double kkx) {
         GeoPoint gp = findClosestIntersection(ray);
         return (gp == null ? _scene.background : calcColor(gp, ray, level - 1, kkx)
         ).scale(kx);
     }
 
+    /**
+     * construct new ray of reflection
+     *
+     * @param gp the intersection of the ray and the geometry
+     * @param n  the normal to the geometry
+     * @param l  the direction of the light
+     * @return the ray of reflection
+     */
     private Ray constructReflectedRay(GeoPoint gp, Vector n, Vector l) {
         double nl = n.dotProduct(l);
         Vector r = l.subtract(n.scale(nl * 2));
         return new Ray(gp.point, r, n);
     }
 
+    /**
+     * construct new ray of refraction
+     *
+     * @param gp the intersection of the ray and the geometry
+     * @param n  the normal to the geometry
+     * @param l  the direction of the light
+     * @return the ray of refraction
+     */
     private Ray constructRefractedRay(GeoPoint gp, Vector n, Vector l) {
         return new Ray(gp.point, l, n);
-        //TODO:maybe a wrong calculate
+
     }
 
+    /**
+     * find the closer point of intersection of the given ray and any of the geometries in the scene
+     *
+     * @param ray the ray to find it intersection
+     * @return the closer point of intersection
+     */
     private GeoPoint findClosestIntersection(Ray ray) {
         List<GeoPoint> l = _scene.geometries.findGeoIntersections(ray);
         if (l == null || l.size() == 0) return null;

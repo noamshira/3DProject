@@ -24,12 +24,25 @@ public class Ray {
         _dir = dir.normalized();
     }
 
+    /**
+     * constructor ray with delta for ray of shadows or reflection or refraction
+     *
+     * @param head      the head of the ray
+     * @param direction the direction of the ray
+     * @param normal    the normal of the geometry to calculate the sign of the delta
+     */
     public Ray(Point3D head, Vector direction, Vector normal) {
         Vector delta = normal.scale(normal.dotProduct(direction) > 0 ? DELTA : -DELTA);
         _p0 = head.add(delta);
         _dir = direction.normalized();
     }
 
+    /**
+     * find the closer point of intersection of ray from list of points
+     *
+     * @param lst lit of point of intersection with the ray
+     * @return the closer point
+     */
     public Point3D findClosestPoint(List<Point3D> lst) {
         if (lst == null || lst.size() == 0)
             return null;
@@ -41,6 +54,12 @@ public class Ray {
         return p;
     }
 
+    /**
+     * find the closer point of intersection of ray from list of GeoPoints
+     *
+     * @param lst lit of point of intersection with the ray
+     * @return the closer GeoPoint
+     */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> lst) {
         if (lst == null || lst.size() == 0)
             return null;
