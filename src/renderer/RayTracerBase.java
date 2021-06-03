@@ -26,4 +26,6 @@ public abstract class RayTracerBase {
      * @return the color of the ray in scene
      */
     public abstract Color traceRay(Ray ray);
+
+
 }
