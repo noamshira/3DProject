@@ -1,5 +1,6 @@
 package renderer;
 
+import elements.AreaLightSource;
 import elements.LightSource;
 import primitives.*;
 import scene.Scene;
@@ -13,15 +14,22 @@ import static primitives.Util.alignZero;
  * Class for basic ray tracer that find the color from the rays
  */
 public class RayTracerBasic extends RayTracerBase {
-    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    private static final int MAX_CALC_COLOR_LEVEL = 10;  // represents Max recursive repeats
     private static final double MIN_CALC_COLOR_K = 0.001;
     private static final double INITIAL_K = 1.0;
 
+    // ***************** Constructor ********************** //
+
+    /**
+     * constructor of ray tracer basic
+     *
+     * @param scene the scene to use in the trace
+     */
     public RayTracerBasic(Scene scene) {
         super(scene);
     }
 
-    // ***************** Operations ******************** //
+    // ***************** Override ******************** //
 
     @Override
     public Color traceRay(Ray ray) {
@@ -31,6 +39,7 @@ public class RayTracerBasic extends RayTracerBase {
         return closestPoint == null ? _scene.background : calcColor(closestPoint, ray);
     }
 
+    // ***************** Operations ********************** //
 
     /**
      * recursive calculate the color of the given point
@@ -154,8 +163,23 @@ public class RayTracerBasic extends RayTracerBase {
      */
     private double transparency(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
         Vector lightDirection = l.scale(-1); // from point to light source
+        if (softShadows && light instanceof AreaLightSource)
+            return calcSoftShadows((AreaLightSource) light, lightDirection, n, geopoint);
         Ray lightRay = new Ray(geopoint.point, lightDirection, n);//add delta
         double lightDistance = light.getDistance(geopoint.point);
+        return Visibility(lightDistance, lightRay, geopoint);
+    }
+
+    /**
+     * check if the ray from the light source are visible from the point
+     * return 1 if yes and 0 if no
+     *
+     * @param lightDistance the distance of the point from the light source
+     * @param lightRay      ray to check from the point to the light source
+     * @param geopoint      the point to check
+     * @return 1 is visible and 0 if no
+     */
+    private double Visibility(double lightDistance, Ray lightRay, GeoPoint geopoint) {
         List<GeoPoint> intersections = _scene.geometries.findGeoIntersections(lightRay);
         if (intersections == null) return 1.0;
         double ktr = 1.0;
@@ -166,6 +190,54 @@ public class RayTracerBasic extends RayTracerBase {
             }
         }
         return ktr;
+    }
+
+    /**
+     * calculate the soft shadows shadows
+     * shoot sample rays to the light source and check if its visible from the origin point or not
+     * the number of the sample rays is  _sqrtBeamNum ^2 + 1 (the +1 is the original ray)
+     * the soft shadows calculate by average the results (sum of the sample /num of sample)
+     * the points on the light that the function use to the ray calculate by divide the light area to squares
+     * the number of the squares is _sqrtBeamNum^2
+     * than in every square choose point randomly and shoot to there ray
+     *
+     * @param light          area light source
+     * @param lightDirection the direction of the light of the center of the light
+     * @param n              normal to the geometry of the origin point
+     * @param geopoint       the origin point
+     * @return multiplier for soft shadows (between 0 and 1)
+     */
+    private double calcSoftShadows(AreaLightSource light, Vector lightDirection, Vector n, GeoPoint geopoint) {
+        //calc ther visibility of the basic ray from the origin point
+        Ray lightRay = new Ray(geopoint.point, lightDirection, n);
+        double lightDistance = light.getDistance(geopoint.point);
+        double ktr = Visibility(lightDistance, lightRay, geopoint);
+        //calc the sample rays and add the result of every ray to ktr
+        Point3D sample;
+        double size = light.getEdges(); //the size of edge of the light
+        //create random points on the light
+        //calculate by divide the light area to squares and add choose random point in the square
+        //the number of the square are _sqrtBeamNum*_sqrtBeamNum
+        double rand[][] = new double[_sqrtBeamNum * _sqrtBeamNum][2];
+        double div = 1 / (double) _sqrtBeamNum;
+        for (int i = 0; i < _sqrtBeamNum; i++) {
+            for (int j = 0; j < _sqrtBeamNum; j++) {
+                rand[i * _sqrtBeamNum + j][0] = Util.random(i * div, (i + 1) * div);
+                rand[i * _sqrtBeamNum + j][1] = Util.random(j * div, (j + 1) * div);
+            }
+        }
+        //construct ray to every random point and calculate its visibility
+        Point3D center = light.getCenter();
+        Vector v = light.getV();
+        Vector u = light.getU();
+        for (int i = 0; i < _sqrtBeamNum * _sqrtBeamNum; i++) {
+            sample = center.add(u.scale((0.5 - rand[i][0]) * size).add(v.scale((0.5 - rand[i][1]) * size)));
+            lightRay = new Ray(geopoint.point, sample.subtract(geopoint.point), n);//add delta to the shadow ray
+            lightDistance = geopoint.point.distance(sample);
+            ktr += Visibility(lightDistance, lightRay, geopoint);
+        }
+        //the soft shadows calculate by average the results (the +1 is the original ray)
+        return ktr / ((_sqrtBeamNum * _sqrtBeamNum) + 1);
     }
 
 

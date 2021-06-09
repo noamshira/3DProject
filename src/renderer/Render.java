@@ -15,8 +15,6 @@ public class Render {
     ImageWriter _imageWriter;
     Camera _camera;
     RayTracerBase _rayTracer;
-    boolean _softShadows = false;
-    int beamNum = 9;
 
     // ***************** Setters ********************** //
 
@@ -36,12 +34,12 @@ public class Render {
     }
 
     public Render setSoftShadows(boolean b) {
-        _softShadows = b;
+        _rayTracer.setSoftShadows(b);
         return this;
     }
 
-    public Render setBeanNum(int n) {
-        beamNum = n;
+    public Render setSqrtBeamNum(int n) {
+        _rayTracer.setSqrtBeamNum(n);
         return this;
     }
 
@@ -64,20 +62,12 @@ public class Render {
         //scan all the pixels and render their colors to the image
         for (int i = 0; i < _imageWriter.getNx(); i++)
             for (int j = 0; j < _imageWriter.getNy(); j++) {
-                if (!_softShadows) {
+                {
                     ray = _camera.constructRayThroughPixel(_imageWriter.getNx(), _imageWriter.getNy(), j, i);
                     c = _rayTracer.traceRay(ray);
-                } else {
-                    List<Ray> lst = _camera.constructBeamThroughPixel(_imageWriter.getNx(), _imageWriter.getNy(), j, i, beamNum);
-                    c = _rayTracer.traceRay(lst.get(0));
-                    for (int element = 1; element < lst.size(); element++) {
-                        c.add(_rayTracer.traceRay(lst.get(element)));
-                        c.scale(1 / lst.size());
-                    }
                 }
                 _imageWriter.writePixel(j, i, c);
             }
-
     }
 
     /**

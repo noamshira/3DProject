@@ -8,7 +8,7 @@ import primitives.Vector;
  * class for spot light source
  */
 public class SpotLight extends PointLight {
-    private Vector direction;
+    private Vector direction; //the direction of the light from the spot light
 
     // ***************** Constructor ********************** //
 
@@ -17,7 +17,7 @@ public class SpotLight extends PointLight {
      *
      * @param intensity the intensity of the light
      * @param position  the position of the light source
-     * @param direction the direction of the lighy
+     * @param direction the direction of the light
      */
     public SpotLight(Color intensity, Point3D position, Vector direction) {
         super(intensity, position);

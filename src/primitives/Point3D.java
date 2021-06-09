@@ -12,6 +12,8 @@ public class Point3D {
 
     public static Point3D ZERO = new Point3D(0, 0, 0);
 
+    // ***************** Constructors ********************** //
+
     /**
      * constructor for Point in 3D
      *
@@ -37,6 +39,9 @@ public class Point3D {
         this._z = z;
     }
 
+
+    // ***************** Operations ********************** //
+
     /**
      * calculate squared distance in 3D space
      *
@@ -56,23 +61,6 @@ public class Point3D {
      */
     public double distance(Point3D p) {
         return Math.sqrt(distanceSquared(p));
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (!(obj instanceof Point3D)) return false;
-        Point3D other = (Point3D) obj;
-        return _x.equals(other._x) && _y.equals(other._y) && _z.equals(other._z);
-    }
-
-    @Override
-    public String toString() {
-        return "_x=" + _x +
-                ", _y=" + _y +
-                ", _z=" + _z;
     }
 
     /**
@@ -100,6 +88,26 @@ public class Point3D {
                 _y.coord - p._y.coord,
                 _z.coord - p._z.coord);
     }
+
+    // ***************** Overrides ********************** //
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof Point3D)) return false;
+        Point3D other = (Point3D) obj;
+        return _x.equals(other._x) && _y.equals(other._y) && _z.equals(other._z);
+    }
+
+    @Override
+    public String toString() {
+        return "_x=" + _x +
+                ", _y=" + _y +
+                ", _z=" + _z;
+    }
+
+    // ***************** Getters ********************** //
 
     public Coordinate getX() {
         return _x;

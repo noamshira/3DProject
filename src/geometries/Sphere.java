@@ -15,8 +15,10 @@ import static primitives.Util.*;
  * class for sphere in 3D space
  */
 public class Sphere extends Geometry {
-    final Point3D _center;
-    final double _radius;
+    final Point3D _center; //the center of the sphere
+    final double _radius; //the radius of the sphere
+
+    // ***************** Constructor ********************** //
 
     /**
      * constructor for sphere
@@ -29,6 +31,8 @@ public class Sphere extends Geometry {
         _radius = radius;
     }
 
+    // ***************** Getters ********************** //
+
     public Point3D getCenter() {
         return _center;
     }
@@ -37,6 +41,7 @@ public class Sphere extends Geometry {
         return _radius;
     }
 
+    // ***************** Overrides ********************** //
 
     @Override
     public Vector getNormal(Point3D p) {
@@ -54,7 +59,6 @@ public class Sphere extends Geometry {
         return "_center=" + _center +
                 ", _radius=" + _radius;
     }
-
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray) {

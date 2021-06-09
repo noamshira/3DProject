@@ -24,16 +24,36 @@ public interface Intersectable {
     }
 
 
+    /**
+     * find the points of the intersection between ray and the geometry
+     * and return the point and the geometry
+     *
+     * @param ray ray to the geometry
+     * @return list of the the intersections of the ray and the geometries
+     */
     List<GeoPoint> findGeoIntersections(Ray ray);
 
+    /**
+     * inner class for construct of geometry and intersection point
+     */
     public static class GeoPoint {
-        public Geometry geometry;
-        public Point3D point;
+        public Geometry geometry; //the intersected geometries
+        public Point3D point; //the point of the intersection
 
+        // ***************** Constructors ********************** //
+
+        /**
+         * constructor of GeoPoint
+         *
+         * @param geometry the in
+         * @param point    //the point of the intersection
+         */
         public GeoPoint(Geometry geometry, Point3D point) {
             this.geometry = geometry;
             this.point = point;
         }
+
+        // ***************** Override ********************** //
 
         @Override
         public boolean equals(Object o) {

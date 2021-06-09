@@ -13,8 +13,10 @@ import static primitives.Util.*;
  * class for plane in 3D space
  */
 public class Plane extends Geometry {
-    final Point3D _q0;
-    final Vector _normal;
+    final Point3D _q0; //point on the plane
+    final Vector _normal; //normal vector to the plane
+
+    // ***************** Constructors ********************** //
 
     /**
      * constructor of plane
@@ -49,9 +51,13 @@ public class Plane extends Geometry {
         _normal = normal;
     }
 
+    // ***************** Getter ********************** //
+
     public Point3D getQ0() {
         return _q0;
     }
+
+    // ***************** Overrides ********************** //
 
     @Override
     public Vector getNormal(Point3D p) {

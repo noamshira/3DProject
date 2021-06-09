@@ -8,6 +8,8 @@ import static primitives.Util.isZero;
 public class Vector {
     Point3D _head;
 
+    // ***************** Constructors ********************** //
+
     /**
      * constructor of vector in 3d space
      *
@@ -48,10 +50,14 @@ public class Vector {
         this._head = new Point3D(x, y, z);
     }
 
+    // ***************** Getter ********************** //
+
 
     public Point3D getHead() {
         return _head;
     }
+
+    // ***************** Operations ********************** //
 
     /**
      * vector addition
@@ -163,6 +169,8 @@ public class Vector {
         Vector v = new Vector(_head._x, _head._y, _head._z);
         return v.normalize();
     }
+
+    // ***************** Overrides ********************** //
 
     @Override
     public boolean equals(Object obj) {

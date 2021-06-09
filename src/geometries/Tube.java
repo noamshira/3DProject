@@ -13,8 +13,10 @@ public class Tube extends Geometry {
     final Ray _axisRay;
     final double _radius;
 
+    // ***************** Constructors ********************** //
+
     /**
-     * constuctor for tube
+     * Constructor for tube
      *
      * @param axisRay ray for the axis of the tube
      * @param radius  the radius of the tube
@@ -24,6 +26,8 @@ public class Tube extends Geometry {
         _radius = radius;
     }
 
+    // ***************** Getters ********************** //
+
     public Ray getAxisRay() {
         return _axisRay;
     }
@@ -31,6 +35,8 @@ public class Tube extends Geometry {
     public double getRadius() {
         return _radius;
     }
+
+    // ***************** Overrides ********************** //
 
     @Override
     public Vector getNormal(Point3D p) {
@@ -59,7 +65,6 @@ public class Tube extends Geometry {
         return "_axisRay=" + _axisRay +
                 ", _radius=" + _radius;
     }
-
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray) {

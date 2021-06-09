@@ -6,14 +6,15 @@ import primitives.Vector;
 
 /**
  * class for point light source
+ * point light can have area
+ * the shape is always square
  */
-public class PointLight extends Light implements LightSource {
+public class PointLight extends Light implements AreaLightSource {
 
-    private Point3D position;
-    private double kC = 1;
-    private double kL = 0;
-    private double kQ = 0;
-    private double radius = 0;
+    private Point3D position; //the potion of the light
+    private double kC = 1, kL = 0, kQ = 0; // Constants for the light intensity.
+    private double edgesSize = 1; //size of the edges of light (squared shape)
+    private Vector u, v = null; //tangent vectors
 
     // ***************** Constructor ********************** //
 
@@ -44,10 +45,18 @@ public class PointLight extends Light implements LightSource {
         return this;
     }
 
-    public PointLight setRadius(double r) {
-        radius = r;
+    public PointLight setEdgesSize(double r) {
+        edgesSize = r;
         return this;
     }
+
+    public PointLight setUV(Vector u, Vector v) {
+        this.u = u;
+        this.v = v;
+        return this;
+    }
+
+
     // ***************** Overriders ********************** //
 
 
@@ -57,9 +66,6 @@ public class PointLight extends Light implements LightSource {
          * 𝑰𝑳 =𝑰𝟎/(𝒌𝒄 + 𝒌𝒍∙ 𝒅 + 𝒌𝒒∙ 𝒅^2)
          */
         double distance = p.distance(position);
-        //add for soft shadows - if there is a radius the distance is from the surface of the light
-        //there for we need to subtract the radius from the distance
-        distance -= radius;
         return getIntensity().scale(1 / (kC + kL * distance + kQ * distance * distance));
     }
 
@@ -70,10 +76,26 @@ public class PointLight extends Light implements LightSource {
 
     @Override
     public double getDistance(Point3D point) {
-        double distance = point.distance(position);
-        //add for soft shadows - if there is a radius the distance is from the surface of the light
-        //there for we need to subtract the radius from the distance
-        distance -= radius;
-        return distance;
+        return point.distance(position);
+    }
+
+    @Override
+    public double getEdges() {
+        return edgesSize;
+    }
+
+    @Override
+    public Point3D getCenter() {
+        return position;
+    }
+
+    @Override
+    public Vector getU() {
+        return u;
+    }
+
+    @Override
+    public Vector getV() {
+        return v;
     }
 }

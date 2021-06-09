@@ -6,10 +6,11 @@ import primitives.Vector;
 
 /**
  * class for directional light source
+ * the potion of the light is in the infinity
  */
 public class DirectionalLight extends Light implements LightSource {
 
-    private Vector direction;
+    private Vector direction; //the direction of the light
 
     // ***************** Constructor ********************** //
 

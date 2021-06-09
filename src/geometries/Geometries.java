@@ -14,8 +14,11 @@ public class Geometries implements Intersectable {
 
     List<Intersectable> lst;
 
+    // ***************** Constructors ********************** //
+
     /**
      * default constructor for geometries
+     * initialize with empty array list
      */
     public Geometries() {
         this.lst = new ArrayList<Intersectable>();
@@ -30,10 +33,12 @@ public class Geometries implements Intersectable {
         lst = new ArrayList<Intersectable>(List.of(geometries));
     }
 
-    //getter
+    // ***************** Getter ********************** //
     public List<Intersectable> getLst() {
         return lst;
     }
+
+    // ***************** Operation ********************** //
 
     /**
      * add geometry or geometries to the list
@@ -44,7 +49,7 @@ public class Geometries implements Intersectable {
         lst.addAll(new ArrayList<Intersectable>(List.of(geometries)));
     }
 
-
+    // ***************** Overrider ********************** //
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray) {

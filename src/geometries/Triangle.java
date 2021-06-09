@@ -13,6 +13,8 @@ import java.util.List;
 public class Triangle extends Polygon {
 
 
+    // ***************** Constructor ********************** //
+
     /**
      * constructor for triangle
      *
@@ -22,6 +24,7 @@ public class Triangle extends Polygon {
         super(vertices);
     }
 
+    // ***************** Overrides ********************** //
 
     @Override
     public List<GeoPoint> findGeoIntersections(Ray ray) {

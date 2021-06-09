@@ -13,6 +13,8 @@ public class Ray {
     final Vector _dir;
     private static final double DELTA = 0.1; //const for the shift of the shadow rays
 
+    // ***************** Constructors ********************** //
+
     /**
      * constructor for ray
      *
@@ -36,6 +38,8 @@ public class Ray {
         _p0 = head.add(delta);
         _dir = direction.normalized();
     }
+
+    // ***************** Operations ********************** //
 
     /**
      * find the closer point of intersection of ray from list of points
@@ -71,6 +75,8 @@ public class Ray {
         return p;
     }
 
+    // ***************** Operation ********************** //
+
     /**
      * get point on the ray by the scalar t
      *
@@ -81,6 +87,8 @@ public class Ray {
         return _p0.add(_dir.scale(t));
     }
 
+    // ***************** Getters ********************** //
+
     public Point3D getP0() {
         return _p0;
     }
@@ -88,6 +96,8 @@ public class Ray {
     public Vector getDir() {
         return _dir;
     }
+
+    // ***************** Overrides ********************** //
 
     @Override
     public String toString() {
