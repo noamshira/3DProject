@@ -119,6 +119,7 @@ public class SoftShadowsTests {
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
                 .setRayTracer((new RayTracerBasic(scene)).setSqrtBeamNum(9))
+                .setMultithreading(3)
                 .setSoftShadows(true);
 
         render.renderImage();
@@ -190,7 +191,9 @@ public class SoftShadowsTests {
                 .setImageWriter(imageWriter) //
                 .setCamera(camera) //
                 .setRayTracer((new RayTracerBasic(scene)).setSqrtBeamNum(9))
-                .setSoftShadows(true);
+                .setSoftShadows(true)
+                .setMultithreading(3)
+                .setAdaptiveSuperSampling(true);
 
         render.renderImage();
         render.writeToImage();

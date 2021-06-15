@@ -6,6 +6,8 @@ import primitives.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -17,7 +19,7 @@ public class RayTracerBasic extends RayTracerBase {
     private static final int MAX_CALC_COLOR_LEVEL = 10;  // represents Max recursive repeats
     private static final double MIN_CALC_COLOR_K = 0.001;
     private static final double INITIAL_K = 1.0;
-
+    private static int counter = 0;
     // ***************** Constructor ********************** //
 
     /**
@@ -130,8 +132,7 @@ public class RayTracerBasic extends RayTracerBase {
         double vr = v.scale(-1).dotProduct(r);
         vr = Math.max(0, vr);
         vr = Math.pow(vr, nShininess);
-        Color color = lightIntensity.scale(ks * vr);
-        return color;
+        return lightIntensity.scale(ks * vr);
     }
 
     /**
@@ -147,8 +148,7 @@ public class RayTracerBasic extends RayTracerBase {
      * @return Color represents the diffusive light for this point
      */
     private Color calcDiffusive(double kd, double ln, Color lightIntensity) {
-        Color color = lightIntensity.scale(kd * Math.abs(ln));
-        return color;
+        return lightIntensity.scale(kd * Math.abs(ln));
     }
 
 
@@ -164,11 +164,16 @@ public class RayTracerBasic extends RayTracerBase {
     private double transparency(LightSource light, Vector l, Vector n, GeoPoint geopoint) {
         Vector lightDirection = l.scale(-1); // from point to light source
         if (softShadows && light instanceof AreaLightSource)
-            return calcSoftShadows((AreaLightSource) light, lightDirection, n, geopoint);
+            if (adaptiveSuperSampling) {
+                return adaptiveSuperSamplingSoftShadow((AreaLightSource) light, lightDirection, n, geopoint);
+            } else {
+                return calcSoftShadows((AreaLightSource) light, lightDirection, n, geopoint);
+            }
         Ray lightRay = new Ray(geopoint.point, lightDirection, n);//add delta
         double lightDistance = light.getDistance(geopoint.point);
         return Visibility(lightDistance, lightRay, geopoint);
     }
+
 
     /**
      * check if the ray from the light source are visible from the point
@@ -208,7 +213,7 @@ public class RayTracerBasic extends RayTracerBase {
      * @return multiplier for soft shadows (between 0 and 1)
      */
     private double calcSoftShadows(AreaLightSource light, Vector lightDirection, Vector n, GeoPoint geopoint) {
-        //calc ther visibility of the basic ray from the origin point
+        //calc the visibility of the basic ray from the origin point
         Ray lightRay = new Ray(geopoint.point, lightDirection, n);
         double lightDistance = light.getDistance(geopoint.point);
         double ktr = Visibility(lightDistance, lightRay, geopoint);
@@ -218,7 +223,7 @@ public class RayTracerBasic extends RayTracerBase {
         //create random points on the light
         //calculate by divide the light area to squares and add choose random point in the square
         //the number of the square are _sqrtBeamNum*_sqrtBeamNum
-        double rand[][] = new double[_sqrtBeamNum * _sqrtBeamNum][2];
+        double[][] rand = new double[_sqrtBeamNum * _sqrtBeamNum][2];
         double div = 1 / (double) _sqrtBeamNum;
         for (int i = 0; i < _sqrtBeamNum; i++) {
             for (int j = 0; j < _sqrtBeamNum; j++) {
@@ -238,6 +243,78 @@ public class RayTracerBasic extends RayTracerBase {
         }
         //the soft shadows calculate by average the results (the +1 is the original ray)
         return ktr / ((_sqrtBeamNum * _sqrtBeamNum) + 1);
+    }
+
+    private double adaptiveSuperSamplingSoftShadow(AreaLightSource light, Vector lightDirection, Vector n, GeoPoint geopoint) {
+        counter = 1;
+        Dictionary<String, Double> memory = new Hashtable<>();
+        //calculate the center point ant store its value
+        Ray lightRay = new Ray(geopoint.point, lightDirection, n);//add delta
+        double lightDistance = light.getDistance(geopoint.point);
+        double centerValue = Visibility(lightDistance, lightRay, geopoint);
+        Point3D center = light.getCenter();
+        memory.put(center.toString(), centerValue);
+        double level = Math.floor(Math.log(_sqrtBeamNum * _sqrtBeamNum) / Math.log(4));
+        // double div = (double) (_sqrtBeamNum * _sqrtBeamNum) / 4;
+        level = Math.pow(4, level);
+        double ktr = centerValue;
+        Vector v = light.getV();
+        Vector u = light.getU();
+        double size = light.getEdges(); //the size of edge of the light
+        Vector[] uvScale = new Vector[4];
+        for (int i = -1; i <= 1; i += 2) {
+            for (int j = -1; j <= 1; j += 2) {
+                uvScale[(i + 1) + (j + 1) / 2] = u.scale(i * (0.5) * size).add(v.scale(j * (0.5) * size));
+            }
+        }
+        ktr += adaptiveSuperSamplingSoftShadow(n, geopoint, memory, center, level, uvScale);
+        //the soft shadows calculate by average the results (the +1 is the original ray)
+        // System.out.println(counter);
+        return ktr / (1 + level);
+    }
+
+    private double adaptiveSuperSamplingSoftShadow(Vector n, GeoPoint geopoint, Dictionary<String, Double> memory, Point3D center, double level, Vector[] uvScale) {
+        double ktr = 0;
+        boolean flag = false;
+        double centerValue = -1;
+        if (level / 4 != 1) centerValue = getSampleValue(n, geopoint, memory, center.toString(), center);
+        double randSize = 1 / level;
+        Point3D sample;
+        Point3D randSample;
+        double[] sampleValue = new double[4];
+        for (int i = 0; i < 4; i++) {
+            sample = center.add(uvScale[i]);
+            randSample = center.add(uvScale[i].scale(2 * (0.5 - Util.random(0, randSize))));
+            sampleValue[i] = getSampleValue(n, geopoint, memory, sample.toString(), randSample);
+            if (sampleValue[i] != centerValue) flag = true;
+        }
+        // if (level/4>1 &&flag) {
+        if (level > 4) {//TODO:change the debug mode
+            for (int i = 0; i < 4; i++)
+                uvScale[i] = uvScale[i].scale(0.5);
+            for (int i = 0; i < 4; i++) {
+                ktr += adaptiveSuperSamplingSoftShadow(n, geopoint, memory,
+                        center.add(uvScale[i]),
+                        level / 4, uvScale);
+            }
+
+        } else
+            for (int i = 0; i < 4; i++) {
+                ktr += sampleValue[i] * level / 4;
+                counter++;
+            }
+        return ktr;
+    }
+
+    private double getSampleValue(Vector n, GeoPoint geopoint, Dictionary<String, Double> memory, String sample, Point3D randSample) {
+        if (memory.get(sample) != null) {
+            return memory.get(sample);
+        }
+        Ray lightRay = new Ray(geopoint.point, randSample.subtract(geopoint.point), n);//add delta to the shadow ray
+        double lightDistance = geopoint.point.distance(randSample);
+        double sampleValue = Visibility(lightDistance, lightRay, geopoint);
+        memory.put(sample, sampleValue);
+        return sampleValue;
     }
 
 

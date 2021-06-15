@@ -57,4 +57,10 @@ class Point3DTest {
 
         assertEquals(new Vector(2, 3, 4), p1.subtract(p2), "wrong result of subtract points");
     }
+
+    @Test
+    void temp() {
+        int a = 2;
+        System.out.print(0.5 / a);
+    }
 }
