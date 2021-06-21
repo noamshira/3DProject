@@ -288,8 +288,8 @@ public class RayTracerBasic extends RayTracerBase {
             sampleValue[i] = getSampleValue(n, geopoint, memory, sample.toString(), randSample);
             if (sampleValue[i] != centerValue) flag = true;
         }
-        // if (level/4>1 &&flag) {
-        if (level > 4) {//TODO:change the debug mode
+        if (level / 4 > 1 && flag) {
+            // if (level > 4) {//TODO:change the debug mode
             for (int i = 0; i < 4; i++)
                 uvScale[i] = uvScale[i].scale(0.5);
             for (int i = 0; i < 4; i++) {
